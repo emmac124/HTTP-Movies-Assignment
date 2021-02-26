@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const initialMovie = {
@@ -8,20 +8,9 @@ const initialMovie = {
     metascore: null,
 }
 
-const UpdateMovie = (props) => {
+const AddForm = (props) => {
     const [movie, setMovie] = useState(initialMovie);
-    const { id } = useParams();
     const { push } = useHistory();
-
-    useEffect(() => {
-        axios.get(`http://localhost:5000/api/movies/${id}`)
-        .then((res)=>{
-            setMovie(res.data);
-          })
-          .catch(err => {
-              console.log(err);
-          })
-    }, []);
     
     const changeHandler = (e) => {
         setMovie({
@@ -32,27 +21,19 @@ const UpdateMovie = (props) => {
 
       const handleSubmit = (e) => {
           e.preventDefault();
-          axios.put(`http://localhost:5000/api/movies/${id}`, movie)
-          .then(res => {
-              props.setMovieList(
-                  props.movieList.map(movie => {
-                    if(String(movie.id) === String(id)){
-                        return(res.data);
-                    } else {
-                        return(movie);
-                    }
-                  })
-              );
-              push('/');
-          })
-          .catch(err => {
-              console.log(err);
-          })
+        //   axios.post(`http://localhost:5000/api/movies`)
+        //   .then(res => {
+        //     props.setMovieList(res.data);
+        //     push('/');
+        //   })
+        //   .catch(err => {
+        //       console.log(err);
+        //   })
       }
 
     return (
         <div>
-            <h3>Update Movie Information</h3>
+            <h3>Add Movie</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Title: </label><br />
@@ -80,10 +61,10 @@ const UpdateMovie = (props) => {
                         placeholder='metascore'
                     /><br />
                 </div>
-            <button>Update</button>
+            <button>Add</button>
             </form>
         </div>
     )
 }
 
-export default UpdateMovie;
+export default AddForm;
